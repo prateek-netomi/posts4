@@ -1,47 +1,107 @@
 <template>
-  <div class="hello">
-    <h1>{{ msg }}</h1>
-    <p>
-      For a guide and recipes on how to configure / customize this project,<br>
-      check out the
-      <a href="https://cli.vuejs.org" target="_blank" rel="noopener">vue-cli documentation</a>.
-    </p>
-    <h3>Installed CLI Plugins</h3>
-    <ul>
-      <li><a href="https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-plugin-babel" target="_blank" rel="noopener">babel</a></li>
-      <li><a href="https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-plugin-eslint" target="_blank" rel="noopener">eslint</a></li>
-    </ul>
-    <h3>Essential Links</h3>
-    <ul>
-      <li><a href="https://vuejs.org" target="_blank" rel="noopener">Core Docs</a></li>
-      <li><a href="https://forum.vuejs.org" target="_blank" rel="noopener">Forum</a></li>
-      <li><a href="https://chat.vuejs.org" target="_blank" rel="noopener">Community Chat</a></li>
-      <li><a href="https://twitter.com/vuejs" target="_blank" rel="noopener">Twitter</a></li>
-      <li><a href="https://news.vuejs.org" target="_blank" rel="noopener">News</a></li>
-    </ul>
-    <h3>Ecosystem</h3>
-    <ul>
-      <li><a href="https://router.vuejs.org" target="_blank" rel="noopener">vue-router</a></li>
-      <li><a href="https://vuex.vuejs.org" target="_blank" rel="noopener">vuex</a></li>
-      <li><a href="https://github.com/vuejs/vue-devtools#vue-devtools" target="_blank" rel="noopener">vue-devtools</a></li>
-      <li><a href="https://vue-loader.vuejs.org" target="_blank" rel="noopener">vue-loader</a></li>
-      <li><a href="https://github.com/vuejs/awesome-vue" target="_blank" rel="noopener">awesome-vue</a></li>
-    </ul>
+  <div class="">
+    <title>{{ msg }}</title>
+    <el-row class="mb-4 center">
+      <el-col :span="12">
+        <el-input
+          @change="filter()"
+          id="search-input"
+          prefix-icon="el-icon-search"
+          placeholder="search"
+          v-model="input"
+          clearable
+        >
+        </el-input> </el-col></el-row
+    ><el-row class="mb-4 center">
+      <el-col :span="12"> {{ filtered_posts.length }} Results </el-col></el-row
+    >
+    <el-row :gutter="20">
+      <el-col
+        class="grid-content pb-4"
+        :span="8"
+        v-for="(post, index) in filtered_posts"
+        :key="index"
+      >
+        <el-card class="main-card">
+          <h3>
+            <strong> {{ post.title }} </strong>
+          </h3>
+          <p>{{ post.body }}</p>
+        </el-card>
+      </el-col>
+    </el-row>
   </div>
 </template>
 
 <script>
+import axios from "axios";
 export default {
-  name: 'HelloWorld',
+  name: "HelloWorld",
   props: {
-    msg: String
-  }
-}
+    msg: String,
+  },
+  data() {
+    return {
+      posts: [],
+      filtered_posts: [],
+      info: 0,
+      input: "",
+    };
+  },
+  mounted() {
+    axios.get("https://jsonplaceholder.typicode.com/posts").then((response) => {
+      this.posts = response.data;
+      this.filtered_posts = response.data;
+    });
+  },
+  methods: {
+    filter() {
+      this.filtered_posts = this.posts.filter((post) =>
+        JSON.stringify(post)
+          .replaceAll("{", " ")
+          .replaceAll("}", " ")
+          .includes(this.input)
+      );
+    },
+  },
+};
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-h3 {
+.main-card:hover {
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.12), 0 0 6px rgba(0, 0, 0, 0.04);
+}
+.main-card {
+  height: 15rem;
+  transition: all 0.3;
+  border-radius: 8px;
+}
+.pb-4 {
+  padding-bottom: 1rem;
+}
+.mb-4 {
+  margin-bottom: 1rem;
+}
+.box {
+  /* height: 15rem; */
+  /* margin: 0.4rem; */
+  padding: 0.4rem;
+  border-radius: 8px;
+  box-shadow: 1px 4px 6px rgb(0 0 0 / 20%);
+  border: 1px solid rgba(0, 0, 0, 0.3);
+  background: aliceblue;
+}
+p {
+  text-align: center;
+}
+.center {
+  width: 100%;
+  display: flex;
+  align-content: center;
+  justify-content: center;
+}
+/* h3 {
   margin: 40px 0 0;
 }
 ul {
@@ -54,5 +114,5 @@ li {
 }
 a {
   color: #42b983;
-}
+} */
 </style>
