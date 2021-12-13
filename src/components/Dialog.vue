@@ -1,20 +1,28 @@
 <template>
   <div>
-    <el-button
-      class="min-w-full hover:bg-purple-100 hover:border-purple-800"
+    <button
+      class="
+        min-w-full
+        px-4
+        py-2 focus:bg-purple-500 focus:text-white
+        transition-all shadow-base hover:shadow-lg
+        hover:bg-purple-200 hover:border-purple-800
+        border-2 border-gray-200
+        rounded-xl
+      "
       @click="dialogVisible = true"
     >
-      <div class="flex ai-center">
-        <el-avatar :src="person.picture.thumbnail"></el-avatar>
-        <h3>
-          <strong class="m-l-2">
+      <div class="flex items-center">
+        <el-avatar class="border-2 border-white" :src="person.picture.thumbnail"></el-avatar>
+        <h3 class="ml-2 color-white">
+          <strong>
             {{ person.name.first }} {{ person.name.middle }}
             {{ person.name.last }}
           </strong>
           <!-- ({{ person.dob.age }} {{ person.gender[0].toUpperCase() }}) -->
         </h3>
       </div>
-    </el-button>
+    </button>
 
     <el-dialog
       class="hover:rounded-xl"
